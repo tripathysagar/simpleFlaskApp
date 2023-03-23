@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block footer %}
+
+    {% if record %}
+        {% for val in record %}
+            <tr>
+                <li><a href="{{ url_for('student',name=val) }}">{{ val }}</a></li> 
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+    

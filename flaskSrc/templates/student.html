@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block footer %}
+
+    {% if student %}
+    <table>
+        <tr>
+            <th>name</th>
+            <th>math</th>
+            <th>physics</th>
+            <th>chemistry</th>
+        </tr>
+        <tr>
+            <th>{{ student["name"] }}</th>
+            <th>{{ student["math"] }}</th>
+            <th>{{ student["physics"] }}</th>
+            <th>{{ student["chemistry"] }}</th>
+        </tr>
+    </table>
+    {% endif %}
+
+{% endblock %}

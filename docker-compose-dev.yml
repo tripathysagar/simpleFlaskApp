@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+  flask-app:
+    container_name: flask-app
+    build: ./flaskSrc
+    #ports:
+    #  - 5000:5000
+    volumes:
+      - ./flaskSrc:/app
+    environment:
+      - FLASK_ENV=development
+    command: gunicorn -b 0.0.0.0:5000 app:app
+    secrets:
+      - db-password
+    depends_on:
+      - db
+    networks:
+      - backend
+      - frontend
+  db:
+    container_name: db
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    secrets:
+      - db-password
+    environment:
+      - MYSQL_ROOT_PASSWORD=/run/secrets/db-password
+      - MYSQL_DATABASE=MARKS
+    networks:
+      - backend
+    volumes:
+      - mysql:/var/lib/mysql
+  proxy:
+    container_name: proxy
+    image: nginx:1.15
+    volumes: 
+      - ./nginxSrc:/var/www
+      - ./nginxSrc/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - flask-app
+    networks:
+      - frontend
+
+    
+volumes:
+  mysql:
+
+networks:
+  backend:
+  frontend:
+
+secrets:
+  db-password:
+    file: dbSrc/passwoard.txt
